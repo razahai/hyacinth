@@ -1,0 +1,18 @@
+{
+  "name": "hyacinth",
+  "version": "1.0.0",
+  "description": "Hyacinth Printing",
+  "private": true,
+  "scripts": {
+    "build-css": "npx tailwindcss -i ./hyacinth/static/css/globals.css -o ./hyacinth/static/css/main.css",
+    "watch-css": "npx tailwindcss --watch -i ./hyacinth/static/css/globals.css -o ./hyacinth/static/css/main.css",
+    "dev-app": "flask --app hyacinth run --debug",
+    "dev": "npm run build-css && concurrently \"npm run watch-css\" \"npm run dev-app\"" 
+  },
+  "dependencies": {
+    "tailwindcss": "^3.4.13"
+  },
+  "devDependencies": {
+    "concurrently": "^9.0.1"
+  }
+}
