@@ -1,11 +1,94 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="{{url_for('static', filename='css/main.css')}}" rel="stylesheet">
-    <title>Hyacinth Printing</title>
-</head>
-<body>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}
+    Home
+{% endblock %}
+
+{% block content %}
+    <div class="w-full flex-1 min-h-0 flex items-center justify-center">
+        <div id="container" class="flex flex-col border-hyacinth-primary rounded-md border-[0.1em] w-[70%] h-[90%]">
+            <div id="header" class="w-full py-2 px-5 bg-hyacinth-primary font-extralight font-sans flex items-center justify-between">
+                <div class="flex justify-center items-center">
+                    <img 
+                        src="{{ url_for('static', filename='img/hyacinth-logo-300x300.svg') }}"
+                        width="48"
+                        class="inline"
+                    />
+                    <h1 class="text-2xl text-white font-bold">
+                        Hyacinth Printing
+                    </h1>
+                </div>
+                <button class="rounded-md bg-hyacinth-secondary px-5 py-2 hover:bg-[#e0d6c3]">
+                    <i class="fa-solid fa-key mr-2"></i>
+                    Request Access Code
+                </button>
+            </div>
+            <div class="w-full min-h-0 flex-1 flex justify-center items-center">
+                <div id="sidebar" class="flex flex-col border-r-[0.1em] border-hyacinth-primary px-3 py-5 min-w-[25%] h-full">
+                    <span class="text-xl font-medium my-2">
+                        Statistics
+                    </span>
+                    <div class="flex justify-center items-center space-y-2 flex-col w-full px-3">
+                        <div class="flex justify-between w-full space-x-4 items-center">
+                            <span class="text-sm font-light text-center">
+                                <i class="fa-solid fa-print mr-2"></i>
+                                Overall Jobs
+                            </span>
+                            <span class="text-sm text-center">
+                                x
+                            </span>
+                        </div>
+                        <div class="flex justify-between w-full space-x-4 items-center">
+                            <span class="text-sm font-light text-center">
+                                <i class="fa-solid fa-user mr-2"></i>
+                                Your Jobs
+                            </span>
+                            <span class="text-sm text-center">
+                                x
+                            </span>
+                        </div>
+                        <div class="flex justify-between w-full space-x-4 items-center">
+                            <span class="text-sm font-light text-center">
+                                <i class="fa-solid fa-truck mr-2"></i>
+                                In Progress
+                            </span>
+                            <span class="text-sm text-center">
+                                x
+                            </span>
+                        </div>
+                        <div class="flex justify-between w-full space-x-4 items-center">
+                            <span class="text-sm font-light text-center">
+                                <i class="fa-solid fa-person-circle-check mr-2"></i>
+                                Pending
+                            </span>
+                            <span class="text-sm text-center">
+                                x
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex-grow px-3 py-5 h-full overflow-y-scroll">                    
+                    <div class="my-2">
+                        <h2 class="text-xl font-medium mb-2">
+                            Printing Service
+                        </h2>
+                        <div class="text-sm font-light [&>span]:block leading-7">
+                            <span>
+                                The following formats are supported: <strong>.pdf, .odt, .doc, .docx, .png, .jpg, .webp</strong>
+                            </span>
+                            <span>
+                                You can print a maximum of <strong>10</strong> pages per print job.
+                            </span>
+                            <span>
+                                You can submit a print job every <strong>5</strong> minutes.
+                            </span>
+                            <span>
+                                Abuse will result in immediate removal from the Hyacinth Printing service. 
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

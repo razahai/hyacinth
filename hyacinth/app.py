@@ -1,6 +1,6 @@
 from flask import Flask, render_template
 
-def create_app(*, testing=False):
+def create_app(*, testing=False) -> Flask:
     app = Flask(__name__)
 
     app.config["SECRET_KEY"] = "dev"
