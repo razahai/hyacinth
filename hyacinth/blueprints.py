@@ -1,0 +1,1 @@
+from hyacinth.apps.printing.views import printing_bp

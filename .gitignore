@@ -258,3 +258,4 @@ pyrightconfig.json
 
 node_modules/
 hyacinth/static/css/main.css
+jobs/

@@ -18,7 +18,7 @@
                         Hyacinth Printing
                     </h1>
                 </div>
-                <button class="rounded-md bg-hyacinth-secondary px-5 py-2 hover:bg-[#e0d6c3]">
+                <button class="rounded-md bg-hyacinth-secondary px-5 py-2 transition duration-200 hover:bg-[#e0d6c3]">
                     <i class="fa-solid fa-key mr-2"></i>
                     Request Access Code
                 </button>
@@ -68,27 +68,83 @@
                     </div>
                 </div>
                 <div class="flex-grow px-3 py-5 h-full overflow-y-scroll">                    
-                    <div class="my-2">
+                    <div class="mt-2">
                         <h2 class="text-xl font-medium mb-2">
                             Printing Service
                         </h2>
-                        <div class="text-sm font-light [&>span]:block leading-7">
+                        <div class="text-sm font-light [&_span]:block leading-7">
                             <span>
-                                The following formats are supported: <strong>.pdf, .odt, .doc, .docx, .png, .jpg, .webp</strong>
+                                Before you continue, please read the following: 
                             </span>
-                            <span>
-                                You can print a maximum of <strong>10</strong> pages per print job.
-                            </span>
-                            <span>
-                                You can submit a print job every <strong>5</strong> minutes.
-                            </span>
-                            <span>
-                                Abuse will result in immediate removal from the Hyacinth Printing service. 
-                            </span>
+                            <ul class="ml-10 list-disc">
+                                <li>
+                                    The following formats are supported: 
+                                    <strong>
+                                        {% for type in settings.ALLOWED_FILE_TYPES[:-1] %}
+                                            {{ type }}, 
+                                        {% endfor %}
+                                        {{ settings.ALLOWED_FILE_TYPES[-1] }}
+                                    </strong>
+                                </li>
+                                <li>
+                                    You can print a maximum of <strong>{{ settings.MAX_PAGES_PER_JOB }}</strong> pages per print job.
+                                </li>
+                                <li>
+                                    You can submit a print job every <strong>{{ settings.PRINT_JOB_RATE_LIMIT }}</strong> minutes.
+                                </li>
+                                <li>
+                                    Delivery can take up to one business day.
+                                </li>
+                                <li>
+                                    Abuse will result in immediate removal from the Hyacinth Printing service. 
+                                </li>
+                            </ul>
                         </div>
+                        <form class="print-job-form mt-4" action="" method="post" enctype="multipart/form-data">
+                            {{ form.hidden_tag() }}
+                            
+                            <div class="relative">
+                            <label for="print_job" class="block font-normal mb-4 cursor-pointer">
+                                {{ form.print_job.label }}
+                                <br/>
+                                <span class="inline-block font-light mt-2 text-sm bg-hyacinth-secondary py-2 px-4 rounded-md transition duration-200 hover:bg-[#e0d6c3]">
+                                    <i class="fa-solid fa-upload mr-2"></i>
+                                    Choose File
+                                </span>
+                                <span class="ml-2 text-gray-500 text-sm file-upload-filename">No file chosen</span>
+                            </label>
+                            {{ form.print_job(class="file-upload-input absolute opacity-0 w-full h-full top-0 left-0 cursor-pointer") }}
+                            </div>
+                            <ul class="text-sm">
+                                {% for error in form.print_job.errors %}
+                                    <li class="text-red-600">{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+                            
+                            {{ form.recaptcha }}
+                            <ul class="text-sm mt-4">
+                                {% for error in form.recaptcha.errors %}
+                                    <li class="text-red-600">{{ error }}</li>
+                                {% endfor %}
+                            </ul>
+
+                            {{ form.submit(class="mt-4 text-sm font-light bg-hyacinth-secondary py-2 px-10 rounded-md transition duration-200 hover:bg-[#e0d6c3] cursor-pointer") }}
+                        </form>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block scripts %}
+    <script>
+        const fileUploadInput = document.querySelector(".file-upload-input");
+        const fileUploadFilename = document.querySelector(".file-upload-filename");
+        
+        fileUploadInput.addEventListener("change", function() {
+            const filename = this.files[0] ? this.files[0].name : "No file chosen";
+            fileUploadFilename.textContent = filename;
+        });
+    </script>
 {% endblock %}

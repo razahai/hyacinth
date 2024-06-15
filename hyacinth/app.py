@@ -1,5 +1,7 @@
 from flask import Flask, render_template
 
+from .blueprints import printing_bp
+
 def create_app(*, testing=False) -> Flask:
     app = Flask(__name__)
 
@@ -10,8 +12,6 @@ def create_app(*, testing=False) -> Flask:
     else:
         app.config.from_pyfile("config.py")
 
-    @app.route("/")
-    def index():
-        return render_template("index.html")
+    app.register_blueprint(printing_bp)
 
     return app
