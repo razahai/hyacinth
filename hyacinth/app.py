@@ -1,6 +1,7 @@
-from flask import Flask, render_template
+from flask import Flask
 
-from .blueprints import printing_bp
+from .blueprints import printing_bp, auth_bp
+from .db import db
 
 def create_app(*, testing=False) -> Flask:
     app = Flask(__name__)
@@ -12,6 +13,9 @@ def create_app(*, testing=False) -> Flask:
     else:
         app.config.from_pyfile("config.py")
 
+    db.init_app(app)
+
     app.register_blueprint(printing_bp)
+    app.register_blueprint(auth_bp)
 
     return app

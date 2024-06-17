@@ -2,6 +2,8 @@ import os
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev").encode("utf-8")
 
+DATABASE_URI = os.getenv("DATABASE_URI", "hyacinth.db")
+
 RECAPTCHA_PUBLIC_KEY = os.getenv("RECAPTCHA_PUBLIC_KEY", "6LfvVmEqAAAAAKAZFnnr26IHuXOaeVVDRnjDO1Fj")
 RECAPTCHA_PRIVATE_KEY = os.getenv("RECAPTCHA_PRIVATE_KEY", "6LfvVmEqAAAAAFMOGAft_1ov8pRVFpBl29Ti9OJg")
 

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}
+    Sign In
+{% endblock %}
+
+{% block content %}
+    <div class="w-full flex-1 min-h-0 flex items-center justify-center">
+        <form class="flex flex-col justify-center w-[35%]" action="" method="post">
+            {{ form.hidden_tag() }}
+            <div>
+                <span class="block text-3xl font-semibold mb-2">{{ form.access_code.label }}</span>
+                {{ form.access_code(placeholder="ABC-123", class="text-sm font-light px-4 w-full py-2 border-gray-400 border-[1px] rounded-xl") }}
+                {% if form.access_code.errors %}
+                    <ul class="text-sm my-4">
+                        {% for error in form.access_code.errors %}
+                            <li class="text-red-600">{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            {{ form.submit(class="mt-4 text-sm font-light bg-hyacinth-secondary w-full py-2 px-10 rounded-md transition duration-200 hover:bg-[#e0d6c3] cursor-pointer") }}
+        </form>
+    </div>
+{% endblock %}

@@ -6,7 +6,15 @@
             class="inline"
         />
     </a>
-    <div>
-        <span>Logged in as <b>NA3-2FC</b></span>
-    </div>
+    {% if context.is_authenticated %}
+        <div class="rounded-md bg-green-400 px-5 py-2 font-light">
+            <i class="fa-solid fa-check mr-2"></i>
+            Logged In
+        </div>
+    {% else %}
+        <a href="{{ url_for('auth.login') }}" class="rounded-md font-light bg-hyacinth-secondary px-5 py-2 transition duration-200 hover:bg-[#e0d6c3]">
+            <i class="fa-solid fa-right-to-bracket mr-2"></i>
+            Log In
+        </a>
+    {% endif %}
 </nav>

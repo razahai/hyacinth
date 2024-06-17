@@ -35,7 +35,7 @@
                                 Overall Jobs
                             </span>
                             <span class="text-sm text-center">
-                                x
+                                {{ context.overall_jobs }}
                             </span>
                         </div>
                         <div class="flex justify-between w-full space-x-4 items-center">
@@ -44,7 +44,7 @@
                                 Your Jobs
                             </span>
                             <span class="text-sm text-center">
-                                x
+                                {{ context.user_jobs }}
                             </span>
                         </div>
                         <div class="flex justify-between w-full space-x-4 items-center">
@@ -53,7 +53,7 @@
                                 In Progress
                             </span>
                             <span class="text-sm text-center">
-                                x
+                                {{ context.in_progress_jobs }}
                             </span>
                         </div>
                         <div class="flex justify-between w-full space-x-4 items-center">
@@ -62,7 +62,7 @@
                                 Pending
                             </span>
                             <span class="text-sm text-center">
-                                x
+                                {{ context.pending_jobs }}
                             </span>
                         </div>
                     </div>
@@ -80,17 +80,17 @@
                                 <li>
                                     The following formats are supported: 
                                     <strong>
-                                        {% for type in settings.ALLOWED_FILE_TYPES[:-1] %}
+                                        {% for type in context.ALLOWED_FILE_TYPES[:-1] %}
                                             {{ type }}, 
                                         {% endfor %}
-                                        {{ settings.ALLOWED_FILE_TYPES[-1] }}
+                                        {{ context.ALLOWED_FILE_TYPES[-1] }}
                                     </strong>
                                 </li>
                                 <li>
-                                    You can print a maximum of <strong>{{ settings.MAX_PAGES_PER_JOB }}</strong> pages per print job.
+                                    You can print a maximum of <strong>{{ context.MAX_PAGES_PER_JOB }}</strong> pages per print job.
                                 </li>
                                 <li>
-                                    You can submit a print job every <strong>{{ settings.PRINT_JOB_RATE_LIMIT }}</strong> minutes.
+                                    You can submit a print job every <strong>{{ context.PRINT_JOB_RATE_LIMIT }}</strong> minutes.
                                 </li>
                                 <li>
                                     Delivery can take up to one business day.
@@ -115,18 +115,22 @@
                             </label>
                             {{ form.print_job(class="file-upload-input absolute opacity-0 w-full h-full top-0 left-0 cursor-pointer") }}
                             </div>
-                            <ul class="text-sm">
-                                {% for error in form.print_job.errors %}
-                                    <li class="text-red-600">{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                            {% if form.print_job.errors %}
+                                <ul class="text-sm my-4">
+                                    {% for error in form.print_job.errors %}
+                                        <li class="text-red-600">{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
                             
                             {{ form.recaptcha }}
-                            <ul class="text-sm mt-4">
-                                {% for error in form.recaptcha.errors %}
-                                    <li class="text-red-600">{{ error }}</li>
-                                {% endfor %}
-                            </ul>
+                            {% if form.recaptcha.errors %}
+                                <ul class="text-sm mt-4">
+                                    {% for error in form.recaptcha.errors %}
+                                        <li class="text-red-600">{{ error }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
 
                             {{ form.submit(class="mt-4 text-sm font-light bg-hyacinth-secondary py-2 px-10 rounded-md transition duration-200 hover:bg-[#e0d6c3] cursor-pointer") }}
                         </form>
@@ -138,6 +142,7 @@
 {% endblock %}
 
 {% block scripts %}
+    {{ super() }}
     <script>
         const fileUploadInput = document.querySelector(".file-upload-input");
         const fileUploadFilename = document.querySelector(".file-upload-filename");

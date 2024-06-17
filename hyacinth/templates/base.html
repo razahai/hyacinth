@@ -10,12 +10,41 @@
     </title>
     {% block css %}
     <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <style>
+        .success {
+            background-color: #6edb80;
+        }
+
+        .error {
+            background-color: #f06969;
+        }
+
+        .alert {
+            -webkit-transition: opacity 250ms ease-in-out;
+            -moz-transition: opacity 250ms ease-in-out;
+            -o-transition: opacity 250ms ease-in-out;
+            transition: opacity 250ms ease-in-out;
+        }
+    </style>
     {% endblock %}
     <link rel="icon" href="{{ url_for('static', filename='img/favicon.ico') }}">
     <link rel="stylesheet" href="https://rsms.me/inter/inter.css">
     <script src="https://kit.fontawesome.com/3bb765fd93.js" crossorigin="anonymous"></script>
 </head>
 <body class="bg-gray-50">
+    <div class="absolute w-screen h-screen flex justify-center px-4 py-4 pointer-events-none">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flex flex-col w-full items-center space-y-10">
+                    {% for category, message in messages %}
+                        <div class="text-center rounded-lg px-10 py-2 text-white alert {{ category }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
     <main class="flex flex-col items-center h-screen">
         {% include "nav.html" %}
 
@@ -23,6 +52,16 @@
         {% endblock %}
     </main>
     {% block scripts %}
+        <script>
+            const alerts = document.querySelectorAll(".alert");
+            document.addEventListener("DOMContentLoaded", function() {
+                setTimeout(function() {
+                    for (const alert of alerts) {
+                        alert.style.opacity = 0;
+                    }
+                }, 3000);
+            })
+        </script>
     {% endblock %}
 </body>
 </html>
