@@ -5,10 +5,6 @@ from hyacinth.db.db import get_db
 
 auth_bp = Blueprint("auth", __name__, url_prefix="/user")
 
-@auth_bp.route("/request", methods=["GET", "POST"])
-def request_code():
-    return render_template("request.html")
-
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if session.get("access_code"):
@@ -34,7 +30,11 @@ def login():
         
         flash(error, "error")
 
-    return render_template("login.html", form=form)
+    context = {
+        "is_authenticated": False
+    }
+
+    return render_template("login.html", context=context, form=form)
 
 @auth_bp.route("/logout")
 def logout():

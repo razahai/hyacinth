@@ -12,3 +12,5 @@ ALLOWED_FILE_TYPES = ["jpg", "jpeg", "png", "pdf", "docx", "doc", "odt", "webp"]
 MAX_FILE_SIZE = 64 * 1024 * 1024 # 64 MB
 MAX_PAGES_PER_JOB = 10
 PRINT_JOB_RATE_LIMIT = 5 
+
+REQUEST_FORM = "https://forms.gle/eUXYWj34nxLmn8Xb7"

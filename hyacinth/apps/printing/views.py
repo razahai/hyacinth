@@ -3,7 +3,7 @@ from flask import Blueprint, flash, redirect, render_template, session, url_for,
 from werkzeug.utils import secure_filename
 
 from hyacinth.apps.printing.forms import PrintRequestForm
-from hyacinth.config import ALLOWED_FILE_TYPES, MAX_FILE_SIZE, MAX_PAGES_PER_JOB, PRINT_JOB_RATE_LIMIT
+from hyacinth.config import ALLOWED_FILE_TYPES, MAX_FILE_SIZE, MAX_PAGES_PER_JOB, PRINT_JOB_RATE_LIMIT, REQUEST_FORM
 from hyacinth.db.db import get_db
 
 printing_bp = Blueprint("printing", __name__)
@@ -39,6 +39,7 @@ def index():
         "MAX_FILE_SIZE": MAX_FILE_SIZE,
         "MAX_PAGES_PER_JOB": MAX_PAGES_PER_JOB,
         "PRINT_JOB_RATE_LIMIT": PRINT_JOB_RATE_LIMIT,
+        "REQUEST_FORM": REQUEST_FORM,
         "is_authenticated": bool(access_code),
         "overall_jobs": overall_job_count,
         "user_jobs": user_job_count,
