@@ -1,6 +1,7 @@
-import os 
+import os
 from flask import Blueprint, flash, redirect, render_template, session, url_for, current_app
 from werkzeug.utils import secure_filename
+from datetime import datetime, timedelta, timezone
 
 from hyacinth.apps.printing.forms import PrintRequestForm
 from hyacinth.config import ALLOWED_FILE_TYPES, MAX_FILE_SIZE, MAX_PAGES_PER_JOB, PRINT_JOB_RATE_LIMIT, REQUEST_FORM
@@ -19,13 +20,23 @@ def index():
         else:
             db = get_db()
             
-            print_job = form.print_job.data
-            filename = f"{access_code}_{secure_filename(print_job.filename)}"
-            print_job.save(os.path.join(current_app.config["UPLOAD_PATH"], filename))
+            time_diff = time_since_last_job(db, access_code)
+            if time_diff is not None and time_diff < timedelta(minutes=PRINT_JOB_RATE_LIMIT):
+                flash(f"You can only submit a print job every 5 minutes. Try again in {int((300 - time_diff.seconds) // 60)} minutes.", "error")
+                return redirect(url_for("printing.index"))
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+            folder_name = f"{access_code}_print_job_{timestamp}"
+            folder_path = os.path.join(current_app.config["UPLOAD_PATH"], folder_name)
+            os.makedirs(folder_path, exist_ok=True)
+            
+            for print_job in form.print_job.data:
+                filename = f"{access_code}_{secure_filename(print_job.filename)}"
+                print_job.save(os.path.join(folder_path, filename))
 
             db.execute(
                 "INSERT INTO jobs (user_id, file_name, job_status) VALUES (?, ?, ?)",
-                (access_code, filename, "pending")
+                (access_code, folder_name, "pending")
             )
             db.commit()
 
@@ -64,3 +75,15 @@ def get_job_data(access_code):
     ).fetchone()
 
     return result
+
+def time_since_last_job(db, access_code):
+    last_print_job = db.execute(
+        "SELECT job_timestamp FROM jobs WHERE user_id = ? ORDER BY job_timestamp DESC LIMIT 1",
+        (access_code,)
+    ).fetchone()
+
+    if last_print_job:
+        last_job_time = datetime.strptime(last_print_job[0], '%Y-%m-%d %H:%M:%S')
+        last_job_time = last_job_time.replace(tzinfo=timezone.utc)
+        return datetime.now(timezone.utc) - last_job_time
+    return None

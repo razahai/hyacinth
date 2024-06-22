@@ -1,11 +1,11 @@
 from flask_wtf import FlaskForm, RecaptchaField
 from flask_wtf.file import FileRequired, FileAllowed, FileField
-from wtforms import SubmitField, ValidationError
+from wtforms import MultipleFileField, SubmitField, ValidationError
 
-from hyacinth.config import ALLOWED_FILE_TYPES, MAX_FILE_SIZE
+from hyacinth.config import ALLOWED_FILE_TYPES, MAX_FILE_SIZE, MAX_PAGES_PER_JOB
 
 class PrintRequestForm(FlaskForm):
-    print_job = FileField(
+    print_job = MultipleFileField(
         "Upload Print Job", 
         validators=[
             FileRequired(), 
@@ -16,9 +16,10 @@ class PrintRequestForm(FlaskForm):
     submit = SubmitField("Submit")
 
     def validate_print_job(form, field): 
-        print_job = field.data
-
-        if len(print_job.read()) > MAX_FILE_SIZE:
-            raise ValidationError("This file is too large")
-
-        print_job.seek(0) 
+        if len(field.data) > MAX_PAGES_PER_JOB:
+            raise ValidationError("Too many files!")
+        
+        for print_job in field.data:
+            if len(print_job.read()) > MAX_FILE_SIZE:
+                raise ValidationError("One of these files are too large")
+            print_job.seek(0) 

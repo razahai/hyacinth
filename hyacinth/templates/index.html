@@ -148,8 +148,9 @@
         const fileUploadFilename = document.querySelector(".file-upload-filename");
         
         fileUploadInput.addEventListener("change", function() {
-            const filename = this.files[0] ? this.files[0].name : "No file chosen";
-            fileUploadFilename.textContent = filename;
+            const printJobs = Array.from(this.files).map(file => file.name);
+            const filenames = printJobs ? printJobs.join(", ") : "No file chosen";
+            fileUploadFilename.textContent = filenames.length > 30 ? filenames.slice(0, 27) + "..." : filenames;
         });
     </script>
 {% endblock %}
